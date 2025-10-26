@@ -1,7 +1,8 @@
 name: Deploy to Minikube using GitHUB Actions - KMI
 
-on: [push]
-  # Triggers the workflow on push or pull request events but only for the "master" branch
+on:
+  push:
+     branches: [ "master" ]
 
 jobs:
   job1:
