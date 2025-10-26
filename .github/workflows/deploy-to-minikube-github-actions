@@ -15,8 +15,8 @@ jobs:
         with:
            driver: docker
 
-     - name: Try the cluster 
-       run: kubectl get nodes
+      - name: Try the cluster 
+        run: kubectl get nodes
 
       - name: Build image
         run: |
