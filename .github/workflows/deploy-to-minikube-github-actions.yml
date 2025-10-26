@@ -25,7 +25,7 @@ jobs:
           eval $(minikube -p minikube docker-env)
           docker build -f ./Dockerfile -t devopshint/node-app:latest .
           echo  "verifying images:"
-          docker images | grep devopskmi
+          docker images 
 
       - name: Deploy to minikube
         run: |
