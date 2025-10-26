@@ -9,21 +9,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Start minikube
-        uses: medyagh/setup-minikube@master
-      - name: Try the cluster !
-        run: kubectl get pods -A
+        uses: medyagh/setup-minikube@v0.3.0
+        with:
+           driver: docker
+
+     - name: Try the cluster 
+       run: kubectl get nodes
+
       - name: Build image
         run: |
           export SHELL=/bin/bash
           eval $(minikube -p minikube docker-env)
           docker build -f ./Dockerfile -t devopskmi/node-app:latest .
-          echo -n "verifying images:"
-          docker images         
+          echo  "verifying images:"
+          docker images | grep devopskmi
+
       - name: Deploy to minikube
-        run:
+        run: |
           kubectl apply -f k8s-node-app.yaml
+          kubectl get pods -A
+
       - name: Test service URLs
         run: |
           minikube service list
