@@ -1,2 +1,1 @@
-# EPAMDEVOPS
-Final TASK DevOps Fundamentals 
+# cicd-pipeline
