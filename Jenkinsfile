@@ -1,4 +1,6 @@
 // Jenkinsfile (para multibranch CICD)
+@Library('epamlab3') _
+
 pipeline {
   agent any
   environment {
@@ -57,21 +59,18 @@ pipeline {
         }
       }
     }
-
-  
-    stage('Deploy') {
+    
+    stage ('Push and Deploy') {
       steps {
-        script {
-          // detiene y borra contenedor previo si existe
-          sh """
-            docker rm -f ${env.BRANCH_NAME}-app || true
-            docker run -d --name ${env.BRANCH_NAME}-app -p ${env.APP_PORT}:${env.APP_PORT} -e PORT=${env.APP_PORT} ${IMAGE_NAME}
-          """
-          echo "Aplicación desplegada en http://localhost:${env.APP_PORT}"
-        }
+        dockerPipeline(
+          image: "${IMAGE_NAME}",
+          triggerDeploy: true
+        )
       }
     }
+  
   } 
+}
 
   post {
     always {
