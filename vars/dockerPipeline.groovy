@@ -21,10 +21,10 @@ def call(Map config) {
                 when { expression { return config.triggerDeploy } }
                 steps {
                     script {
-                        def BRANCH = env.BRANCH_NAME
-                        if (BRANCH == "master") {
+                        def branch = env.BRANCH_NAME
+                        if (branch == "master") {
                             build job: "Deploy_to_master", parameters: [string(name: 'IMAGE_NAME', value: config.imageName)]
-                        } else if (BRANCH == "dev") {
+                        } else if (branch == "dev") {
                             build job: "Deploy_to_dev", parameters: [string(name: 'IMAGE_NAME', value: config.imageName)]
                         }
                     }
