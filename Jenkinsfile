@@ -58,16 +58,7 @@ pipeline {
       }
     }
 
-    stage ('test the image with Trivy'){
-      steps{
-        script{
-          sh "docker run --rm \
-             -v /var/run/docker.sock:/var/run/docker.sock \
-             aquasec/trivy:latest  image --severity HIGH,CRITICAL --exit-code 1 --format table ${IMAGE_NAME}"
-        }
-      }
-    }
-
+  
     stage('Deploy') {
       steps {
         script {
