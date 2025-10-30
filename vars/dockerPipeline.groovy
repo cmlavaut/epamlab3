@@ -1,12 +1,6 @@
 def call(Map config) {
     pipeline {
         agent any
-
-        environment {
-            IMAGE_NAME = config.imageName
-            BRANCH_NAME = env.BRANCH_NAME
-        }
-
         stages {
 
             stage('Login Docker Hub') {
@@ -19,7 +13,7 @@ def call(Map config) {
 
             stage('Push Image') {
                 steps {
-                    sh "docker push ${IMAGE_NAME}"
+                    sh "docker push ${config.imageName}"
                 }
             }
 
@@ -28,9 +22,9 @@ def call(Map config) {
                 steps {
                     script {
                         if (BRANCH_NAME == "master") {
-                            build job: "Deploy_to_master", parameters: [string(name: 'IMAGE_NAME', value: IMAGE_NAME)]
+                            build job: "Deploy_to_master", parameters: [string(name: 'IMAGE_NAME', value: config.imageName)]
                         } else if (BRANCH_NAME == "dev") {
-                            build job: "Deploy_to_dev", parameters: [string(name: 'IMAGE_NAME', value: IMAGE_NAME)]
+                            build job: "Deploy_to_dev", parameters: [string(name: 'IMAGE_NAME', value: config.imageName)]
                         }
                     }
                 }
