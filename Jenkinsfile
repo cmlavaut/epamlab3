@@ -72,9 +72,8 @@ pipeline {
   } 
 }
 
-  post {
+post {
     always {
       echo "Pipeline finalizado para ${env.BRANCH_NAME}"
     }
-  }
 }
