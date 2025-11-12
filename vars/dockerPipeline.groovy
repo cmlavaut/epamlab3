@@ -4,16 +4,14 @@ def call(Map config = [:]) {
     def extraArgs = config.get('extraArgs', '') 
 
     stage('Login Docker Hub') {
-        steps {
-            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                         sh "echo $PASS | docker login -u $USER --password-stdin"
-            }
         }
+        
     }
     stage('Push Image') {
-        steps {
-                    sh "docker push ${image_dock}"
-        }
+        sh "docker push ${image_dock}"
+        
     }
     
     if (triggerDeploy) {
