@@ -11,6 +11,7 @@ def call(Map config = [:]) {
     }
     stage('Push Image') {
         sh "docker push ${image_dock}"
+        echo "Imagen en el DockerHub"
         
     }
     
