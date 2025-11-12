@@ -1,4 +1,8 @@
-def call(Map config) {
+def call(Map config = [:]) {
+    def image_dock= config.get ('image')
+    def triggerDeploy = config.get('triggerDeploy', false)
+    def extraArgs = config.get('extraArgs', '') 
+
     stage('Login Docker Hub') {
         steps {
             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
@@ -8,22 +12,18 @@ def call(Map config) {
     }
     stage('Push Image') {
         steps {
-                    sh "docker push ${config.imageName}"
+                    sh "docker push ${image_dock}"
         }
     }
     
-    
-    stage('Trigger Deploy Pipeline') {
-        when { expression { return config.triggerDeploy } }
-            steps {
-                 script {
-                    def branch = env.BRANCH_NAME
-                    if (branch == "master") {
-                        build job: "Deploy_to_master", parameters: [string(name: 'IMAGE_NAME', value: config.imageName)]
-                    } else if (branch == "dev") {
-                        build job: "Deploy_to_dev", parameters: [string(name: 'IMAGE_NAME', value: config.imageName)]
-                    }
-                }
-            }
+    if (triggerDeploy) {
+        stage('Trigger Deploy Pipeline') {
+            echo "Deploying container from image: ${image_dock}"
+            sh """
+            docker stop ${image_dock} || true
+            docker rm ${image_dock} || true
+            docker run -d --name ${image_dock} ${extraArgs} ${image_dock}
+            """
+        }
     }
 }

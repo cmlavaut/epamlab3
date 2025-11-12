@@ -64,7 +64,8 @@ pipeline {
       steps {
         dockerPipeline(
           image: "${IMAGE_NAME}",
-          triggerDeploy: true
+          triggerDeploy: true,
+          extraArgs: "-p ${env.APP_PORT}:${env.APP_PORT}"
         )
       }
     }
