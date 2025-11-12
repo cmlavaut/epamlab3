@@ -1,5 +1,5 @@
 def call(Map config = [:]) {
-    def image_dock= config.get ('image')
+    def image_dock= config.get('image')
     def triggerDeploy = config.get('triggerDeploy', false)
     def extraArgs = config.get('extraArgs', '') 
 
