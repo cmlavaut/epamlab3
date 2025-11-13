@@ -10,7 +10,8 @@ pipeline {
           dockerPipeline(
             image: 'test:latest', 
             triggerDeploy: false,
-            extraArgs: "-p 3000:3000")
+            extraArgs: "-p 3000:3000"
+          )
         }
       }
     }
