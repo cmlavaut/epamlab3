@@ -70,8 +70,11 @@ pipeline {
         
     stage('Push Image') {
       steps{
-          sh "docker push ${IMAGE_NAME}"
+          sh """
+          docker tag ${IMAGE_NAME} kmilavaut/${IMAGE_NAME}
+          docker push kmilavaut/${IMAGE_NAME}
           echo "Imagen en el DockerHub"
+          """
       } 
     }
     
