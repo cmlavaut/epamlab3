@@ -61,26 +61,16 @@ pipeline {
     }
     
     stage('Login Docker Hub') {
-        try {
-            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-             sh "echo $PASS | docker login -u $USER --password-stdin"
-            }
-        }
-        catch (err) {
-            echo "Error: ${err}"
-        }        
+      withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+        sh "echo $PASS | docker login -u $USER --password-stdin"
+       }
     }
-
+        
     stage('Push Image') {
-        try {
-            sh "docker push ${IMAGE_NAME}"
-            echo "Imagen en el DockerHub"
-        }
-        catch (err){
-            echo "error en la imagen enviada: ${err}"
-        }       
+      sh "docker push ${IMAGE_NAME}"
+      echo "Imagen en el DockerHub"
     }
-
+    
     stage ('Deploy') {
       steps {
         script {
@@ -93,7 +83,7 @@ pipeline {
     }
   }
 
-       
+      
 post {
     always {
       echo "Pipeline finalizado para ${env.BRANCH_NAME}"
